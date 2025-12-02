@@ -29,13 +29,16 @@ int main(int argc, char *argv[]) {
                 break;
             }
             palyerId = argv[i][0];
-            printf("Player ID: %c\n", palyerId);
+            if (isValidPlayer(palyerId)) {
+                printf("Player ID: %c\n", palyerId);
+            } else {
+                printf("用户 id 不合法");
+                return 0;
+            }
         }
     }
     return 0;
 }
-
-
 
 void printUsage() {
     printf("Usage:\n");
@@ -46,8 +49,12 @@ void printUsage() {
 }
 
 bool isValidPlayer(char playerId) {
-    // TODO: Implement this function
-    return false;
+    
+    if (palyerId <= '0' || palyerId >= '9') {
+        return false;
+    }
+
+    return true;
 }
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
