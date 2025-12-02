@@ -7,6 +7,7 @@
 #include "labyrinth.h"
 char palyerId = 'q';
 FILE* getMapFileRead();
+FILE* getMapFileWirte();
 void initMap(Labyrinth *labyrinth);
 void printMap(Labyrinth *labyrinth);
 
@@ -46,7 +47,9 @@ int main(int argc, char *argv[]) {
             if (pos.row != -1) {
                 printf("当前用户的位置为 {%d, %d} \n", pos.row, pos.col);
             } else {
-
+                Position pos = findFirstEmptySpace(labyrinth);
+                labyrinth->map[pos.row][pos.col] = palyerId;
+                saveMap(labyrinth, "map.txt");
             }
         }
     }
@@ -113,8 +116,24 @@ bool movePlayer(Labyrinth *labyrinth, char playerId, const char *direction) {
 }
 
 bool saveMap(Labyrinth *labyrinth, const char *filename) {
-    // TODO: Implement this function
-    return false;
+    FILE* file = getMapFileWirte();
+    if (file == NULL) {
+        return false;
+    }
+
+    for (int i = 0; i < labyrinth->rows; i++) {
+        // 3. 遍历每一列
+        for (int j = 0; j < labyrinth->cols; j++) {
+            // 将字符写入文件
+            fputc(labyrinth->map[i][j], file);
+        }
+        // 4. 每一行写完后，必须手动写入一个换行符
+        fputc('\n', file);
+    }
+
+    fclose(file);
+
+    return true;
 }
 
 // Check if all empty spaces are connected using DFS
@@ -130,6 +149,16 @@ bool isConnected(Labyrinth *labyrinth) {
 
 FILE* getMapFileRead() {
     FILE *map = fopen("./maps/map.txt", "r");
+    if (map == NULL) {
+        perror("文件打开失败");
+        return NULL;
+    }
+
+    return map;
+}
+
+FILE* getMapFileWirte() {
+        FILE *map = fopen("./maps/map.txt", "w");
     if (map == NULL) {
         perror("文件打开失败");
         return NULL;
@@ -185,3 +214,4 @@ void printMap(Labyrinth *labyrinth) {
     }
     
 }
+
