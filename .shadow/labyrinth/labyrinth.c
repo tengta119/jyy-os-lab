@@ -48,6 +48,7 @@ int main(int argc, char *argv[]) {
                 printf("当前用户的位置为 {%d, %d} \n", pos.row, pos.col);
             } else {
                 Position pos = findFirstEmptySpace(labyrinth);
+                printf("用户不存在，找到空闲位置插入 {%d, %d}", pos.row, pos.col);
                 labyrinth->map[pos.row][pos.col] = palyerId;
                 saveMap(labyrinth, "map.txt");
             }
