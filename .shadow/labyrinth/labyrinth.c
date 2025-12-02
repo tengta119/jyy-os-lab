@@ -8,6 +8,7 @@
 
 int main(int argc, char *argv[]) {
     // TODO: Implement this function
+    printf("hello world");
     return 0;
 }
 
