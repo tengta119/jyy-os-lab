@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
         perror("内存分配失败");
         exit(1);
     }
-    
+
     for (size_t i = 1; i < argc; i++) {
 
         if (strcmp(argv[i], "--map") == 0 || strcmp(argv[i], "-m") == 0) {
@@ -40,6 +40,11 @@ int main(int argc, char *argv[]) {
             } else {
                 printf("用户 id 不合法");
                 return 0;
+            }
+
+            Position pos = findPlayer(labyrinth, palyerId);
+            if (pos.row != -1) {
+                printf("当前用户的位置为 {%d, %d}", pos.row, pos.col);
             }
         }
     }
@@ -68,8 +73,16 @@ bool loadMap(Labyrinth *labyrinth, const char *filename) {
 }
 
 Position findPlayer(Labyrinth *labyrinth, char playerId) {
-    // TODO: Implement this function
     Position pos = {-1, -1};
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            if (strcmp(labyrinth->map[i][j], palyerId) == 0) {
+                pos.row = i, pos.col = j;
+            }
+        }
+        printf("\n");
+    }
+
     return pos;
 }
 
