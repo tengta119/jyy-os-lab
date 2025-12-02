@@ -7,19 +7,19 @@
 #include "labyrinth.h"
 
 int main(int argc, char *argv[]) {
-    // for (size_t i = 1; i < argc; i++) {
-    //     if (strcmp(argv[i], "--map") || strcmp(argv[i], "-m")) {
-    //         i++;
-    //         if (i >= argc) {
-    //             break;
-    //         }
-    //         printf(argv[i]);
-    //         if (strcmp(argv[i], "map.txt")) {
-    //             printf("开始读取地图");
-    //             printMap();
-    //         }
-    //     }
-    // }
+    for (size_t i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--map") || strcmp(argv[i], "-m")) {
+            i++;
+            if (i >= argc) {
+                break;
+            }
+            printf(argv[i]);
+            if (strcmp(argv[i], "map.txt")) {
+                printf("开始读取地图");
+                printMap();
+            }
+        }
+    }
     printMap();
     return 0;
 }
