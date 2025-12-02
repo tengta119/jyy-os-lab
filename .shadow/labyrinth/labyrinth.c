@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
         if (strcmp(argv[i], "--map") || strcmp(argv[i], "-m")) {
             i++;
             if (strcmp(argv[i], "map.txt")) {
+                printf("开始读取地图");
                 printMap();
             }
         }
