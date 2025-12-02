@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             if (strcmp(argv[i], "map.txt") == 0) {
+                printf("init");
                 initMap();
                 printMap();
             }
