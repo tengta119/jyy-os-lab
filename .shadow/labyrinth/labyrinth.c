@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
                 printf("开始读取地图\n");
                 printMap();
             }
-        } else if (strcmp(argv[i], "playerId") == 0 || strcmp(argv[i], "p") == 0) {
+        } else if (strcmp(argv[i], "--playerId") == 0 || strcmp(argv[i], "-p") == 0) {
             i++;
             if (i >= argc) {
                 break;
