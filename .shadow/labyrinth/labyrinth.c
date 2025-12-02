@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             palyId = atoi(argv[i]);
-            printf("%d", palyId);
+            printf("%d \n", palyId);
         }
     }
     return 0;
