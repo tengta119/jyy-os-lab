@@ -14,9 +14,8 @@ int main(int argc, char *argv[]) {
             if (i >= argc) {
                 break;
             }
-            printf(argv[i]);
             if (strcmp(argv[i], "map.txt") == 0) {
-                printf("开始读取地图");
+                printf("开始读取地图\n");
                 printMap();
             }
         }
