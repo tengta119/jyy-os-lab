@@ -11,7 +11,13 @@ void initMap(Labyrinth *labyrinth);
 void printMap(Labyrinth *labyrinth);
 
 int main(int argc, char *argv[]) {
-    Labyrinth *labyrinth;
+
+    Labyrinth* labyrinth = (Labyrinth*)malloc(sizeof(Labyrinth));
+    if (labyrinth == NULL) {
+        perror("内存分配失败");
+        exit(1);
+    }
+    
     for (size_t i = 1; i < argc; i++) {
 
         if (strcmp(argv[i], "--map") == 0 || strcmp(argv[i], "-m") == 0) {
@@ -116,11 +122,6 @@ void initMap(Labyrinth *labyrinth) {
         return;
     }
 
-    labyrinth = (Labyrinth*)malloc(sizeof(Labyrinth));
-    if (labyrinth == NULL) {
-        perror("内存分配失败");
-        exit(1);
-    }
     // 初始化行列
     labyrinth->rows = 0;
     labyrinth->cols = 0;
