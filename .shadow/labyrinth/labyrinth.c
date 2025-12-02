@@ -80,7 +80,6 @@ Position findPlayer(Labyrinth *labyrinth, char playerId) {
                 pos.row = i, pos.col = j;
             }
         }
-        printf("\n");
     }
 
     return pos;
