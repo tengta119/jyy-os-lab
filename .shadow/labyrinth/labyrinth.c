@@ -6,6 +6,10 @@
 #include <testkit.h>
 #include "labyrinth.h"
 char palyerId = 'q';
+
+FILE* getMapFile();
+void printMap();
+
 int main(int argc, char *argv[]) {
     for (size_t i = 1; i < argc; i++) {
 
@@ -32,6 +36,11 @@ int main(int argc, char *argv[]) {
 
 void printMap() {
     FILE *map = getMapFile();
+
+    if (map == NULL) {
+        // getMapFile 内部已经打印了错误信息，这里直接返回即可
+        return;
+    }
 
     int ch;
 
