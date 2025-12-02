@@ -18,6 +18,8 @@ int main(int argc, char *argv[]) {
                 printf("开始读取地图\n");
                 printMap();
             }
+        } else if (strcmp(argv[i], "--help") == 0) {
+            printUsage();
         }
     }
     return 0;
