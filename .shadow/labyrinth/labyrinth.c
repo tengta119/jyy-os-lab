@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <testkit.h>
 #include "labyrinth.h"
-int palyId = -1;
+char palyerId;
 int main(int argc, char *argv[]) {
     for (size_t i = 1; i < argc; i++) {
 
@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
             if (i >= argc) {
                 break;
             }
-            palyId = atoi(argv[i]);
-            printf("当前用户id： %d \n", palyId);
+            palyerId = argv[i];
+            printf("当前用户id：%s \n", palyerId);
         }
     }
     return 0;
