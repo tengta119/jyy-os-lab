@@ -9,13 +9,13 @@
 int main(int argc, char *argv[]) {
     for (size_t i = 1; i < argc; i++) {
 
-        if (strcmp(argv[i], "--map") || strcmp(argv[i], "-m")) {
+        if (strcmp(argv[i], "--map") == 0 || strcmp(argv[i], "-m") == 0) {
             i++;
             if (i >= argc) {
                 break;
             }
             printf(argv[i]);
-            if (strcmp(argv[i], "map.txt")) {
+            if (strcmp(argv[i], "map.txt") == 0) {
                 printf("开始读取地图");
                 printMap();
             }
