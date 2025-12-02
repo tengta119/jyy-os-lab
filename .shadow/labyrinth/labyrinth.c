@@ -8,12 +8,33 @@
 
 int main(int argc, char *argv[]) {
     for (size_t i = 0; i < argc; i++) {
-        printf(argv[i]);
-        printf(" ");
+        if (strcmp(argv[i], "--map") || strcmp(argv[i], "-m")) {
+            i++;
+            if (strcmp(argv[i], "map.txt")) {
+                printMap();
+            }
+        }
     }
     printf("\n");
     
     return 0;
+}
+
+void printMap() {
+    FILE *map = fopen("./maps/map.txt", "rw");
+    if (map == NULL) {
+        perror("文件打开失败");
+        return;
+    }
+
+    int ch;
+
+    while ((ch == fgetc(map)) != EOF) {
+        putchar(ch);
+    }
+
+    fclose(map);
+    
 }
 
 void printUsage() {
