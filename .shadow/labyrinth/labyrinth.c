@@ -98,7 +98,7 @@ Position findFirstEmptySpace(Labyrinth *labyrinth) {
         for (size_t j = 0; j < labyrinth->cols; j++) {
             if (labyrinth->map[i][j] == '.') {
                 pos.row = i, pos.col = j;
-                break;
+                return pos;
             }
         }
     }
