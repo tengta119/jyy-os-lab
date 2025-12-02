@@ -160,8 +160,10 @@ bool doMovePlayer(Labyrinth *labyrinth, Position pre, char playerId, const char 
         printf("用户 player: %d 移动", palyerId);
         saveMap(labyrinth, "map.txt");
         printMap(labyrinth);
+        return true;
     }
     
+    return false;
 }
 
 bool saveMap(Labyrinth *labyrinth, const char *filename) {
