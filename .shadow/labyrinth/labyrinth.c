@@ -76,7 +76,7 @@ Position findPlayer(Labyrinth *labyrinth, char playerId) {
     Position pos = {-1, -1};
     for (size_t i = 0; i < labyrinth->rows; i++) {
         for (size_t j = 0; j < labyrinth->cols; j++) {
-            if (strcmp(labyrinth->map[i][j], palyerId) == 0) {
+            if (labyrinth->map[i][j] == palyerId) {
                 pos.row = i, pos.col = j;
             }
         }
