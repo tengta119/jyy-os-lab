@@ -6,7 +6,7 @@
 #include <testkit.h>
 #include "labyrinth.h"
 char palyerId = 'q';
-FILE* getMapFile();
+FILE* getMapFileRead();
 void initMap(Labyrinth *labyrinth);
 void printMap(Labyrinth *labyrinth);
 
@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
             Position pos = findPlayer(labyrinth, palyerId);
             if (pos.row != -1) {
                 printf("当前用户的位置为 {%d, %d} \n", pos.row, pos.col);
+            } else {
+
             }
         }
     }
@@ -88,12 +90,21 @@ Position findPlayer(Labyrinth *labyrinth, char playerId) {
 Position findFirstEmptySpace(Labyrinth *labyrinth) {
     // TODO: Implement this function
     Position pos = {-1, -1};
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            if (labyrinth->map[i][j] == '.') {
+                pos.row = i, pos.col = j;
+            }
+        }
+    }
     return pos;
 }
 
 bool isEmptySpace(Labyrinth *labyrinth, int row, int col) {
-    // TODO: Implement this function
-    return false;
+    if (labyrinth->map[row][col] != '.') {
+        return false;
+    }
+    return true;
 }
 
 bool movePlayer(Labyrinth *labyrinth, char playerId, const char *direction) {
@@ -117,7 +128,7 @@ bool isConnected(Labyrinth *labyrinth) {
 }
 
 
-FILE* getMapFile() {
+FILE* getMapFileRead() {
     FILE *map = fopen("./maps/map.txt", "r");
     if (map == NULL) {
         perror("文件打开失败");
@@ -128,7 +139,7 @@ FILE* getMapFile() {
 }
 
 void initMap(Labyrinth *labyrinth) {
-    FILE *map = getMapFile();
+    FILE *map = getMapFileRead();
     if (map == NULL) {
         // getMapFile 内部已经打印了错误信息，这里直接返回即可
         return;
