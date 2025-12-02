@@ -20,8 +20,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    printf("\n");
-    
+    printMap();
     return 0;
 }
 
