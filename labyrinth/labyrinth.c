@@ -10,6 +10,7 @@ FILE* getMapFileRead();
 FILE* getMapFileWirte();
 void initMap(Labyrinth *labyrinth);
 void printMap(Labyrinth *labyrinth);
+bool doMovePlayer(Labyrinth *labyrinth, Position pre, char playerId, const char *direction);
 
 int main(int argc, char *argv[]) {
 
@@ -113,7 +114,56 @@ bool isEmptySpace(Labyrinth *labyrinth, int row, int col) {
 }
 
 bool movePlayer(Labyrinth *labyrinth, char playerId, const char *direction) {
-    // TODO: Implement this function
+    Position pre = {-1, -1};
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            if (labyrinth->map[i][j] == palyerId) {
+                pre.row = i, pre.col = j;
+                doMovePlayer(labyrinth, pre, palyerId, direction);
+                return true;
+            }
+        }
+        
+    }
+    
+    return false;
+}
+
+bool doMovePlayer(Labyrinth *labyrinth, Position pre, char playerId, const char *direction) {
+    bool ans = false;
+    if (strcmp(direction, "up")) {
+        if (labyrinth->map[pre.row + 1][pre.col] == '.') {
+            labyrinth->map[pre.row][pre.col] = '.';
+            labyrinth->map[pre.row + 1][pre.col] = palyerId;
+            ans = true;
+        }
+    } else if (strcmp(direction, "down")) {
+        if (labyrinth->map[pre.row - 1][pre.col] == '.') {
+            labyrinth->map[pre.row][pre.col] = '.';
+            labyrinth->map[pre.row - 1][pre.col] = palyerId;
+            ans = true;
+        }
+    } else if (strcmp(direction, "left")) {
+        if (labyrinth->map[pre.row][pre.col - 1] == '.') {
+            labyrinth->map[pre.row][pre.col] = '.';
+            labyrinth->map[pre.row][pre.col - 1] = palyerId;
+            ans = true;
+        }
+    } else if (strcmp(direction, "right")) {
+        if (labyrinth->map[pre.row][pre.col + 1] == '.') {
+            labyrinth->map[pre.row][pre.col] = '.';
+            labyrinth->map[pre.row][pre.col + 1] = palyerId;
+            ans = true;
+        }
+    }
+    
+    if (ans) {
+        printf("用户 player: %d 移动", palyerId);
+        saveMap(labyrinth, "map.txt");
+        printMap(labyrinth);
+        return true;
+    }
+    
     return false;
 }
 
@@ -138,14 +188,46 @@ bool saveMap(Labyrinth *labyrinth, const char *filename) {
     return true;
 }
 
-// Check if all empty spaces are connected using DFS
+// visited 没用上
 void dfs(Labyrinth *labyrinth, int row, int col, bool visited[MAX_ROWS][MAX_COLS]) {
-    // TODO: Implement this function
+    if (row < 0 || row >= labyrinth->rows || col < 0 || col >= labyrinth->cols) {
+        return;
+    }
+    if (labyrinth->map[row][col] != '.') {
+        return;
+    }
+
+    labyrinth->map[row][col] = 'x';
+    dfs(labyrinth, row + 1, col, visited);
+    dfs(labyrinth, row - 1, col, visited);
+    dfs(labyrinth, row, col + 1, visited);
+    dfs(labyrinth, row, col - 1, visited);
 }
 
 bool isConnected(Labyrinth *labyrinth) {
-    // TODO: Implement this function
-    return false;
+    int count = 0;
+    Labyrinth* tmp = (Labyrinth*)malloc(sizeof(Labyrinth));
+    tmp->rows = labyrinth->rows;
+    tmp->cols = labyrinth->cols;
+    for (size_t i = 0; i < tmp->rows; i++) {
+        for (int j = 0; j < tmp->cols; j++) {
+            tmp->map[i][j] = labyrinth->map[i][j];
+        }
+    }
+
+    bool visited[MAX_ROWS][MAX_COLS];
+    for (size_t i = 0; i < tmp->rows; i++) {
+        for (int j = 0; j < tmp->cols; j++) {
+            if (tmp->map[i][j] == '.') {
+                dfs(tmp, i, j, visited);
+                count++;
+            }
+        }
+    }
+    if (count > 1) {
+        return false;
+    }
+    return true;
 }
 
 
