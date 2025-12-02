@@ -7,8 +7,37 @@
 #include "labyrinth.h"
 
 int main(int argc, char *argv[]) {
-    // TODO: Implement this function
+    for (size_t i = 1; i < argc; i++) {
+
+        if (strcmp(argv[i], "--map") == 0 || strcmp(argv[i], "-m") == 0) {
+            i++;
+            if (i >= argc) {
+                break;
+            }
+            if (strcmp(argv[i], "map.txt") == 0) {
+                printf("开始读取地图\n");
+                printMap();
+            }
+        }
+    }
     return 0;
+}
+
+void printMap() {
+    FILE *map = fopen("./maps/map.txt", "r");
+    if (map == NULL) {
+        perror("文件打开失败");
+        return;
+    }
+
+    int ch;
+
+    while ((ch = fgetc(map)) != EOF) {
+        putchar(ch);
+    }
+
+    fclose(map);
+    
 }
 
 void printUsage() {
