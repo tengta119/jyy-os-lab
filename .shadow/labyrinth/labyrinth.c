@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             palyId = atoi(argv[i]);
-            printf("%d \n", palyId);
+            printf("当前用户id： %d \n", palyId);
         }
     }
     return 0;
