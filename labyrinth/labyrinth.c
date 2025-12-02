@@ -5,8 +5,20 @@
 #include <assert.h>
 #include <testkit.h>
 #include "labyrinth.h"
+char palyerId = 'q';
+FILE* getMapFileRead();
+FILE* getMapFileWirte();
+void initMap(Labyrinth *labyrinth);
+void printMap(Labyrinth *labyrinth);
 
 int main(int argc, char *argv[]) {
+
+    Labyrinth* labyrinth = (Labyrinth*)malloc(sizeof(Labyrinth));
+    if (labyrinth == NULL) {
+        perror("内存分配失败");
+        exit(1);
+    }
+
     for (size_t i = 1; i < argc; i++) {
 
         if (strcmp(argv[i], "--map") == 0 || strcmp(argv[i], "-m") == 0) {
@@ -15,31 +27,34 @@ int main(int argc, char *argv[]) {
                 break;
             }
             if (strcmp(argv[i], "map.txt") == 0) {
-                printf("开始读取地图\n");
-                printMap();
+                loadMap(labyrinth, "map.txt");
+                printMap(labyrinth);
             }
-        } else if (strcmp(argv[i], "--help") == 0) {
-            printUsage();
+        } else if (strcmp(argv[i], "--playerId") == 0 || strcmp(argv[i], "-p") == 0) {
+            i++;
+            if (i >= argc) {
+                break;
+            }
+            palyerId = argv[i][0];
+            if (isValidPlayer(palyerId)) {
+                printf("Player ID: %c\n", palyerId);
+            } else {
+                printf("用户 id 不合法");
+                return 0;
+            }
+
+            Position pos = findPlayer(labyrinth, palyerId);
+            if (pos.row != -1) {
+                printf("当前用户的位置为 {%d, %d} \n", pos.row, pos.col);
+            } else {
+                Position pos = findFirstEmptySpace(labyrinth);
+                printf("用户不存在，找到空闲位置插入 {%d, %d} \n", pos.row, pos.col);
+                labyrinth->map[pos.row][pos.col] = palyerId;
+                saveMap(labyrinth, "map.txt");
+            }
         }
     }
     return 0;
-}
-
-void printMap() {
-    FILE *map = fopen("./maps/map.txt", "r");
-    if (map == NULL) {
-        perror("文件打开失败");
-        return;
-    }
-
-    int ch;
-
-    while ((ch = fgetc(map)) != EOF) {
-        putchar(ch);
-    }
-
-    fclose(map);
-    
 }
 
 void printUsage() {
@@ -51,30 +66,50 @@ void printUsage() {
 }
 
 bool isValidPlayer(char playerId) {
-    // TODO: Implement this function
-    return false;
+    
+    if (palyerId <= '0' || palyerId >= '9') {
+        return false;
+    }
+    return true;
 }
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
-    // TODO: Implement this function
-    return false;
+    initMap(labyrinth);
+    return true;
 }
 
 Position findPlayer(Labyrinth *labyrinth, char playerId) {
-    // TODO: Implement this function
     Position pos = {-1, -1};
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            if (labyrinth->map[i][j] == palyerId) {
+                pos.row = i, pos.col = j;
+            }
+        }
+    }
+
     return pos;
 }
 
 Position findFirstEmptySpace(Labyrinth *labyrinth) {
     // TODO: Implement this function
     Position pos = {-1, -1};
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            if (labyrinth->map[i][j] == '.') {
+                pos.row = i, pos.col = j;
+                return pos;
+            }
+        }
+    }
     return pos;
 }
 
 bool isEmptySpace(Labyrinth *labyrinth, int row, int col) {
-    // TODO: Implement this function
-    return false;
+    if (labyrinth->map[row][col] != '.') {
+        return false;
+    }
+    return true;
 }
 
 bool movePlayer(Labyrinth *labyrinth, char playerId, const char *direction) {
@@ -83,8 +118,24 @@ bool movePlayer(Labyrinth *labyrinth, char playerId, const char *direction) {
 }
 
 bool saveMap(Labyrinth *labyrinth, const char *filename) {
-    // TODO: Implement this function
-    return false;
+    FILE* file = getMapFileWirte();
+    if (file == NULL) {
+        return false;
+    }
+
+    for (int i = 0; i < labyrinth->rows; i++) {
+        // 3. 遍历每一列
+        for (int j = 0; j < labyrinth->cols; j++) {
+            // 将字符写入文件
+            fputc(labyrinth->map[i][j], file);
+        }
+        // 4. 每一行写完后，必须手动写入一个换行符
+        fputc('\n', file);
+    }
+
+    fclose(file);
+
+    return true;
 }
 
 // Check if all empty spaces are connected using DFS
@@ -96,3 +147,73 @@ bool isConnected(Labyrinth *labyrinth) {
     // TODO: Implement this function
     return false;
 }
+
+
+FILE* getMapFileRead() {
+    FILE *map = fopen("./maps/map.txt", "r");
+    if (map == NULL) {
+        perror("文件打开失败");
+        return NULL;
+    }
+
+    return map;
+}
+
+FILE* getMapFileWirte() {
+        FILE *map = fopen("./maps/map.txt", "w");
+    if (map == NULL) {
+        perror("文件打开失败");
+        return NULL;
+    }
+
+    return map;
+}
+
+void initMap(Labyrinth *labyrinth) {
+    FILE *map = getMapFileRead();
+    if (map == NULL) {
+        // getMapFile 内部已经打印了错误信息，这里直接返回即可
+        return;
+    }
+
+    // 初始化行列
+    labyrinth->rows = 0;
+    labyrinth->cols = 0;
+
+    char buffer[MAX_COLS + 2];
+    while (fgets(buffer, sizeof(buffer), map) != NULL) {
+        // 安全检查：防止超过最大行数
+        if (labyrinth->rows >= MAX_ROWS) {
+            printf("警告：地图行数超过最大限制 (%d)，停止读取。\n", MAX_ROWS);
+            break;
+        }
+
+        buffer[strcspn(buffer, "\n")] = '\0';
+        // 如果是空行，跳过（可选逻辑）
+        if (strlen(buffer) == 0) continue;
+
+        strcpy(labyrinth->map[labyrinth->rows], buffer);
+
+        // 更新列数（假设是矩形地图，取最长的一行或者第一行的长度）
+        int currentLineLen = strlen(buffer);
+        if (currentLineLen > labyrinth->cols) {
+            labyrinth->cols = currentLineLen;
+        }
+
+        labyrinth->rows++;
+    }
+    
+
+    fclose(map);
+}
+
+void printMap(Labyrinth *labyrinth) {
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            printf("%c", labyrinth->map[i][j]);
+        }
+        printf("\n");
+    }
+    
+}
+
