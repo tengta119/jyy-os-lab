@@ -7,8 +7,12 @@
 #include "labyrinth.h"
 
 int main(int argc, char *argv[]) {
-    // TODO: Implement this function
-    printf("hello world \n");
+    for (size_t i = 0; i < argc; i++) {
+        printf(argv[i]);
+        printf(" ");
+    }
+    printf("\n");
+    
     return 0;
 }
 
