@@ -9,6 +9,7 @@ char palyerId = 'q';
 Labyrinth *labyrinth;
 FILE* getMapFile();
 void initMap();
+void printMap();
 
 int main(int argc, char *argv[]) {
     for (size_t i = 1; i < argc; i++) {
@@ -34,59 +35,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void initMap() {
-    FILE *map = getMapFile();
-    if (map == NULL) {
-        // getMapFile 内部已经打印了错误信息，这里直接返回即可
-        return;
-    }
 
-    labyrinth = (Labyrinth*)malloc(sizeof(Labyrinth));
-    if (labyrinth == NULL) {
-        perror("内存分配失败");
-        exit(1);
-    }
-    // 初始化行列
-    labyrinth->rows = 0;
-    labyrinth->cols = 0;
-
-    char buffer[MAX_COLS + 2];
-    while (fgets(buffer, sizeof(buffer), map) != NULL) {
-        // 安全检查：防止超过最大行数
-        if (labyrinth->rows >= MAX_ROWS) {
-            printf("警告：地图行数超过最大限制 (%d)，停止读取。\n", MAX_ROWS);
-            break;
-        }
-
-        buffer[strcspn(buffer, "\n")] = '\0';
-        // 如果是空行，跳过（可选逻辑）
-        if (strlen(buffer) == 0) continue;
-
-        strcpy(labyrinth->map[labyrinth->rows], buffer);
-
-        // 更新列数（假设是矩形地图，取最长的一行或者第一行的长度）
-        int currentLineLen = strlen(buffer);
-        if (currentLineLen > labyrinth->cols) {
-            labyrinth->cols = currentLineLen;
-        }
-
-        labyrinth->rows++;
-    }
-    
-
-    fclose(map);
-    
-}
-
-void printMap() {
-    for (size_t i = 0; i < labyrinth->rows; i++) {
-        for (size_t j = 0; j < labyrinth->cols; j++) {
-            printf("%c", labyrinth->map[i][j]);
-        }
-        printf("\n");
-    }
-    
-}
 
 void printUsage() {
     printf("Usage:\n");
@@ -152,4 +101,57 @@ FILE* getMapFile() {
     }
 
     return map;
+}
+
+void initMap() {
+    FILE *map = getMapFile();
+    if (map == NULL) {
+        // getMapFile 内部已经打印了错误信息，这里直接返回即可
+        return;
+    }
+
+    labyrinth = (Labyrinth*)malloc(sizeof(Labyrinth));
+    if (labyrinth == NULL) {
+        perror("内存分配失败");
+        exit(1);
+    }
+    // 初始化行列
+    labyrinth->rows = 0;
+    labyrinth->cols = 0;
+
+    char buffer[MAX_COLS + 2];
+    while (fgets(buffer, sizeof(buffer), map) != NULL) {
+        // 安全检查：防止超过最大行数
+        if (labyrinth->rows >= MAX_ROWS) {
+            printf("警告：地图行数超过最大限制 (%d)，停止读取。\n", MAX_ROWS);
+            break;
+        }
+
+        buffer[strcspn(buffer, "\n")] = '\0';
+        // 如果是空行，跳过（可选逻辑）
+        if (strlen(buffer) == 0) continue;
+
+        strcpy(labyrinth->map[labyrinth->rows], buffer);
+
+        // 更新列数（假设是矩形地图，取最长的一行或者第一行的长度）
+        int currentLineLen = strlen(buffer);
+        if (currentLineLen > labyrinth->cols) {
+            labyrinth->cols = currentLineLen;
+        }
+
+        labyrinth->rows++;
+    }
+    
+
+    fclose(map);
+}
+
+void printMap() {
+    for (size_t i = 0; i < labyrinth->rows; i++) {
+        for (size_t j = 0; j < labyrinth->cols; j++) {
+            printf("%c", labyrinth->map[i][j]);
+        }
+        printf("\n");
+    }
+    
 }
