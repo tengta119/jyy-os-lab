@@ -96,7 +96,7 @@ Position findFirstEmptySpace(Labyrinth *labyrinth) {
     Position pos = {-1, -1};
     for (size_t i = 0; i < labyrinth->rows; i++) {
         for (size_t j = 0; j < labyrinth->cols; j++) {
-            if (labyrinth->map[i][j] == '.') {
+            if (labyrinth->map[i][j] == 46) {
                 pos.row = i, pos.col = j;
             }
         }
