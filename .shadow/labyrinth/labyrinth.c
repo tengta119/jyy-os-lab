@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             palyerId = argv[i];
-            printf("当前用户id：%s \n", palyerId);
+            printf("当前用户id：%c \n", palyerId);
         }
     }
     return 0;
