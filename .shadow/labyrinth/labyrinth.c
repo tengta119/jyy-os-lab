@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <testkit.h>
 #include "labyrinth.h"
-char palyerId;
+char palyerId = 'q';
 int main(int argc, char *argv[]) {
     for (size_t i = 1; i < argc; i++) {
 
