@@ -99,7 +99,7 @@ bool isConnected(Labyrinth *labyrinth) {
 }
 
 
-FILE* getMapFile() {
+FILE *getMapFile() {
     FILE *map = fopen("./maps/map.txt", "r");
     if (map == NULL) {
         perror("文件打开失败");
