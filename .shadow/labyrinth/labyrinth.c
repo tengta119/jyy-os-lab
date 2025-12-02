@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <testkit.h>
 #include "labyrinth.h"
-
+int palyId = -1;
 int main(int argc, char *argv[]) {
     for (size_t i = 1; i < argc; i++) {
 
@@ -18,8 +18,13 @@ int main(int argc, char *argv[]) {
                 printf("开始读取地图\n");
                 printMap();
             }
-        } else if (strcmp(argv[i], "--help") == 0) {
-            printUsage();
+        } else if (strcmp(argv[i], "playerId") == 0 || strcmp(argv[i], "p") == 0) {
+            i++;
+            if (i >= argc) {
+                break;
+            }
+            palyId = argv[i] - "0";
+            printf(palyId);
         }
     }
     return 0;
