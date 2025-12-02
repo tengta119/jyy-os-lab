@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 }
 
 void printMap() {
-    FILE *map = fopen("./maps/map.txt", "rw");
+    FILE *map = fopen("./maps/map.txt", "r");
     if (map == NULL) {
         perror("文件打开失败");
         return;
@@ -33,7 +33,7 @@ void printMap() {
 
     int ch;
 
-    while ((ch == fgetc(map)) != EOF) {
+    while ((ch = fgetc(map)) != EOF) {
         putchar(ch);
     }
 
