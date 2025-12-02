@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
             if (i >= argc) {
                 break;
             }
-            palyerId = argv[i];
-            printf(argv[i]);
+            palyerId = argv[i][0];
+            printf(palyerId);
         }
     }
     return 0;
