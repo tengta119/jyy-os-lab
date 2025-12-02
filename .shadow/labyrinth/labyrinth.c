@@ -31,11 +31,7 @@ int main(int argc, char *argv[]) {
 }
 
 void printMap() {
-    FILE *map = fopen("./maps/map.txt", "r");
-    if (map == NULL) {
-        perror("文件打开失败");
-        return;
-    }
+    FILE *map = getMapFile();
 
     int ch;
 
@@ -100,4 +96,15 @@ void dfs(Labyrinth *labyrinth, int row, int col, bool visited[MAX_ROWS][MAX_COLS
 bool isConnected(Labyrinth *labyrinth) {
     // TODO: Implement this function
     return false;
+}
+
+
+FILE* getMapFile() {
+    FILE *map = fopen("./maps/map.txt", "r");
+    if (map == NULL) {
+        perror("文件打开失败");
+        return NULL;
+    }
+
+    return map;
 }
