@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
             Position pos = findPlayer(labyrinth, palyerId);
             if (pos.row != -1) {
-                printf("当前用户的位置为 {%d, %d}", pos.row, pos.col);
+                printf("当前用户的位置为 {%d, %d} \n", pos.row, pos.col);
             }
         }
     }
