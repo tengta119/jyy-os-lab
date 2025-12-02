@@ -212,7 +212,7 @@ bool isConnected(Labyrinth *labyrinth) {
         }
     }
 
-    bool visited[MAX_ROWS][MAX_COLS] = {true};
+    bool visited[MAX_ROWS][MAX_COLS];
     for (size_t i = 0; i < tmp->rows; i++) {
         for (int j = 0; j < tmp->cols; j++) {
             if (tmp->map[i][j] == '.') {
