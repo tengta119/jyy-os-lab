@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             palyerId = argv[i];
-            printf(palyerId);
+            printf(argv[i]);
         }
     }
     return 0;
