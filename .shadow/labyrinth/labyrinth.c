@@ -23,8 +23,7 @@ int main(int argc, char *argv[]) {
             if (i >= argc) {
                 break;
             }
-            printf(argv[i]);
-            palyId = argv[i] - "0";
+            palyId = atoi(argv[i]);
             printf("%d", palyId);
         }
     }
