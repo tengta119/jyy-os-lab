@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
                 break;
             }
             palyerId = argv[i][0];
-            printf(palyerId);
+            printf("Player ID: %c\n", palyerId);
         }
     }
     return 0;
