@@ -10,6 +10,7 @@ FILE* getMapFileRead();
 FILE* getMapFileWirte();
 void initMap(Labyrinth *labyrinth);
 void printMap(Labyrinth *labyrinth);
+bool doMovePlayer(Labyrinth *labyrinth, Position pre, char playerId, const char *direction);
 
 int main(int argc, char *argv[]) {
 
