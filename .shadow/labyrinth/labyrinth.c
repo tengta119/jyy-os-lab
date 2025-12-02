@@ -6,12 +6,12 @@
 #include <testkit.h>
 #include "labyrinth.h"
 char palyerId = 'q';
-Labyrinth *labyrinth;
 FILE* getMapFile();
-void initMap();
-void printMap();
+void initMap(Labyrinth *labyrinth);
+void printMap(Labyrinth *labyrinth);
 
 int main(int argc, char *argv[]) {
+    Labyrinth *labyrinth;
     for (size_t i = 1; i < argc; i++) {
 
         if (strcmp(argv[i], "--map") == 0 || strcmp(argv[i], "-m") == 0) {
@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
                 break;
             }
             if (strcmp(argv[i], "map.txt") == 0) {
-                initMap();
-                printMap();
+                loadMap(labyrinth, "map.txt");
+                printMap(labyrinth);
             }
         } else if (strcmp(argv[i], "--playerId") == 0 || strcmp(argv[i], "-p") == 0) {
             i++;
@@ -53,13 +53,12 @@ bool isValidPlayer(char playerId) {
     if (palyerId <= '0' || palyerId >= '9') {
         return false;
     }
-
     return true;
 }
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
-    // TODO: Implement this function
-    return false;
+    initMap(labyrinth);
+    return true;
 }
 
 Position findPlayer(Labyrinth *labyrinth, char playerId) {
@@ -110,7 +109,7 @@ FILE* getMapFile() {
     return map;
 }
 
-void initMap() {
+void initMap(Labyrinth *labyrinth) {
     FILE *map = getMapFile();
     if (map == NULL) {
         // getMapFile 内部已经打印了错误信息，这里直接返回即可
@@ -153,7 +152,7 @@ void initMap() {
     fclose(map);
 }
 
-void printMap() {
+void printMap(Labyrinth *labyrinth) {
     for (size_t i = 0; i < labyrinth->rows; i++) {
         for (size_t j = 0; j < labyrinth->cols; j++) {
             printf("%c", labyrinth->map[i][j]);
