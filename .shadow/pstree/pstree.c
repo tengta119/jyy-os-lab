@@ -24,6 +24,15 @@ typedef struct ProcessNode {
 
 } ProcessNode;
 
+typedef struct {
+    int id;
+    ProcessNode* node;
+    UT_hash_handle hh;
+} pidToNode;
+
+pidToNode* map = NULL;
+
+
 bool isAllDigits(const char *str);
 // 创建一个新的进程节点
 ProcessNode* create_node(int pid, int ppid, const char* name);
