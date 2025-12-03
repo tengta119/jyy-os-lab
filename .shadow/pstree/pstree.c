@@ -55,13 +55,15 @@ int main() {
             snprintf(path, sizeof(path), "/proc/%s/status", entry->d_name);
             ProcessNode *node = create_node(path);
             add_node_map(node);
-            printf("|-- %s (PID: %d, PPID: %d)\n", node->name, node->pid, node->ppid);
         }
     }
     printf("\n");
     closedir(dir);
-    ProcessNode* node = find_node(1);
-    printf("|-- %s (PID: %d, PPID: %d)\n", node->name, node->pid, node->ppid);
+
+    ProcessNode *current_node, *tmp;
+    HASH_ITER(hh, map, current_node, tmp) {
+        printf("|-- %s (PID: %d, PPID: %d)\n", current_node->name, current_node->pid, current_node->ppid);
+    }
 }
 
 bool isAllDigits(const char *str) {
