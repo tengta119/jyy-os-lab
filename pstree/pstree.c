@@ -8,6 +8,8 @@
 #include <stdbool.h> // 包含 bool 类型 (C99 标准)
 #include <uthash.h>
 #define MAX_NAME_LEN 256
+#define MAX_LINE_LEN 256
+#define MAX_NAME_LEN 128
 
 typedef struct ProcessNode {
 
@@ -27,7 +29,7 @@ ProcessNode* map = NULL;
 bool isAllDigits(const char *str);
 
 // 创建一个新的进程节点
-ProcessNode* create_node(int pid, int ppid, const char* name);
+ProcessNode* create_node(const char* path);
 // 向父节点添加一个子节点
 void add_child(ProcessNode* parent, ProcessNode* child);
 // 释放节点及其所有子节点（递归释放）
@@ -45,18 +47,48 @@ int main() {
         return 0;
     }
 
-    printf("进程号:\n");
-
     struct dirent *entry;
+
     while ((entry = readdir(dir)) != NULL) {
-        char *fileName = entry->d_name;
-        if (isAllDigits(fileName)) {
-            printf("%s ", fileName);
+        if (isAllDigits(entry->d_name)) {
+            char path[256];
+            snprintf(path, sizeof(path), "/proc/%s/status", entry->d_name);
+            ProcessNode *node = create_node(path);
+            add_node_map(node);
         }
     }
     printf("\n");
     closedir(dir);
 
+    ProcessNode *current_node, *tmp;
+    HASH_ITER(hh, map, current_node, tmp) {
+        ProcessNode *p_node = find_node(current_node->ppid);
+        if (p_node != NULL) {
+            add_child(p_node, current_node);
+        }
+    }
+
+    ProcessNode *root = find_node(1);
+    dfsPrintPstree(root, 0);
+}
+
+void dfsPrintPstree(ProcessNode *node, int deep) {
+    if (node == NULL) return; 
+
+    for (int i = 0; i < deep; i++) {
+
+        if (i == deep - 1) {
+            printf("|-- "); 
+        } else {
+            printf("|   ");
+        }
+    }
+
+    printf("%s (pid: %d)\n", node->name, node->pid);
+
+    for (int i = 0; i < node->child_count; i++) {
+        dfsPrintPstree(node->children[i], deep + 1);
+    }
 }
 
 bool isAllDigits(const char *str) {
@@ -75,7 +107,43 @@ bool isAllDigits(const char *str) {
     
 }
 
-ProcessNode* create_node(int pid, int ppid, const char* name) {
+ProcessNode* create_node(const char* path) {
+
+    FILE *file = fopen(path, "r");
+    if (file == NULL) {
+        perror("文件不存在");
+    }
+
+    // 用于存储提取结果的变量
+    char name[MAX_NAME_LEN] = {0};
+    int pid = -1;
+    int ppid = -1;
+
+    char line[MAX_LINE_LEN];
+    while (fgets(line, sizeof(line), file)) {
+        
+        // 2. 检查 "Name:" 字段
+        if (strncmp(line, "Name:", 5) == 0) {
+            // sscanf 会自动跳过 "Name:" 后的空白字符（空格或制表符）
+            sscanf(line, "Name: %s", name);
+        }
+        // 3. 检查 "Pid:" 字段 (注意: Pid 只有3个字母，所以比较长度是4)
+        else if (strncmp(line, "Pid:", 4) == 0) {
+            sscanf(line, "Pid: %d", &pid);
+        }
+        // 4. 检查 "PPid:" 字段
+        else if (strncmp(line, "PPid:", 5) == 0) {
+            sscanf(line, "PPid: %d", &ppid);
+        }
+
+        // 优化：如果三个值都找到了，可以提前退出循环
+        if (pid != -1 && ppid != -1 && name[0] != '\0') {
+            break; 
+        }
+    }
+
+    fclose(file);
+
     ProcessNode* node = (ProcessNode*)malloc(sizeof(ProcessNode));
     if (!node) return NULL;
 
