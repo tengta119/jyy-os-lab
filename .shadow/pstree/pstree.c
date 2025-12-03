@@ -26,7 +26,7 @@ int main() {
             printf("%s ", fileName);
         }
     }
-    
+    printf("\n");
     closedir(dir);
 }
 
