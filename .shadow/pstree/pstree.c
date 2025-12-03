@@ -75,7 +75,7 @@ int main() {
 void dfsPrintPstree(ProcessNode *node, int deep) {
     
     char str[256];
-    sprintf(str, sizeof(str), "%s", " ");
+
     for (size_t i = 0; i < deep; i++) {
         sprintf(str, sizeof(str), "%s", "| ");
     }
