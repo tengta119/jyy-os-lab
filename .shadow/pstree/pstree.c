@@ -73,21 +73,22 @@ int main() {
 }
 
 void dfsPrintPstree(ProcessNode *node, int deep) {
-    
-    char str[256];
+    if (node == NULL) return; 
 
-    for (size_t i = 0; i < deep; i++) {
-        sprintf(str, sizeof(str), "%s", "| ");
+    for (int i = 0; i < deep; i++) {
+
+        if (i == deep - 1) {
+            printf("|-- "); 
+        } else {
+            printf("|   ");
+        }
     }
-    if (deep != 0) {
-        sprintf(str, sizeof(str), "%s", "--");
-    }
-    
-    printf("%s (%d, %s)", str, node->pid, node->name);
-    for (size_t i = 0; i < node->child_count; i++) {
+
+    printf("%s (pid: %d)\n", node->name, node->pid);
+
+    for (int i = 0; i < node->child_count; i++) {
         dfsPrintPstree(node->children[i], deep + 1);
     }
-    
 }
 
 bool isAllDigits(const char *str) {
