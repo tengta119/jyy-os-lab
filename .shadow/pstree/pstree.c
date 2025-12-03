@@ -62,8 +62,14 @@ int main() {
 
     ProcessNode *current_node, *tmp;
     HASH_ITER(hh, map, current_node, tmp) {
-        printf("|-- %s (PID: %d, PPID: %d)\n", current_node->name, current_node->pid, current_node->ppid);
+        ProcessNode *p_node = find_node(current_node->ppid);
+        if (p_node != NULL) {
+            add_child(p_node, current_node);
+        }
     }
+
+    ProcessNode *root = find_node(1);
+    printf(root->name);
 }
 
 bool isAllDigits(const char *str) {
