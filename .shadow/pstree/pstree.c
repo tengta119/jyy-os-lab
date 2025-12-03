@@ -6,7 +6,7 @@
 #include <dirent.h>
 #include <ctype.h>  // 包含 isdigit 函数
 #include <stdbool.h> // 包含 bool 类型 (C99 标准)
-#include "uthash.h"
+#include <uthash.h>
 #define MAX_NAME_LEN 256
 
 typedef struct ProcessNode {
