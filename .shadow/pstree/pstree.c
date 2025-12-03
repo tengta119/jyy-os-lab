@@ -60,7 +60,8 @@ int main() {
     }
     printf("\n");
     closedir(dir);
-
+    ProcessNode* node = find_node(1);
+    printf("|-- %s (PID: %d, PPID: %d)\n", node->name, node->pid, node->ppid);
 }
 
 bool isAllDigits(const char *str) {
