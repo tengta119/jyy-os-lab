@@ -84,7 +84,7 @@ void dfsPrintPstree(ProcessNode *node, int deep) {
         }
     }
 
-    printf("%s (pid: %d)\n", node->name, node->pid);
+    printf("(name: %s pid: %d)\n", node->name, node->pid);
 
     for (int i = 0; i < node->child_count; i++) {
         dfsPrintPstree(node->children[i], deep + 1);
