@@ -3,7 +3,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <dirent.h>
 
 int main() {
-    printf("hello world \n");
+    DIR *dir = opendir("/proc");
+
+    if (dir == NULL) {
+        perror("无法打开mul");
+        return 0;
+    }
+
+    printf("目录内容:\n");
+
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        printf("\n %s", entry->d_name);
+    }
+    
+    closedir(dir);
 }
