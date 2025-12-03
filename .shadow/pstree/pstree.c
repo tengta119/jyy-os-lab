@@ -49,29 +49,13 @@ int main() {
 
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL) {
-        char *fileName = entry->d_name;
-        if (isAllDigits(fileName)) {
-            printf("%s ", fileName);
+        if (isAllDigits(entry->d_name)) {
+            printf("%s ", entry->d_name);
         }
     }
     printf("\n");
     closedir(dir);
 
-    // 创建一个节点
-    ProcessNode *p1 = (ProcessNode*)malloc(sizeof(ProcessNode));
-    p1->pid = 100;
-    p1->ppid = 1;
-    
-    // 添加到哈希表
-    add_node_map(p1);
-    
-    // 查找
-    ProcessNode *found = find_node(100);
-    if (found) {
-        printf("Found PID: %d\n", found->pid);
-    } else {
-        printf("Not Found\n");
-    }
 }
 
 bool isAllDigits(const char *str) {
