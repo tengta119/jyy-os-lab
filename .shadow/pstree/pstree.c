@@ -12,34 +12,30 @@
 typedef struct ProcessNode {
 
     int pid;
-
     int ppid;
-
     char name[MAX_NAME_LEN];
-
     struct ProcessNode **children; 
-    
     int child_count;  
-    int capacity;     
+    int capacity;  
+
+    UT_hash_handle hh;
 
 } ProcessNode;
 
-typedef struct {
-    int id;
-    ProcessNode* node;
-    UT_hash_handle hh;
-} pidToNode;
-
-pidToNode* map = NULL;
-
+ProcessNode* map = NULL;
 
 bool isAllDigits(const char *str);
+
 // 创建一个新的进程节点
 ProcessNode* create_node(int pid, int ppid, const char* name);
 // 向父节点添加一个子节点
 void add_child(ProcessNode* parent, ProcessNode* child);
 // 释放节点及其所有子节点（递归释放）
 void free_tree(ProcessNode* node);
+
+void add_node_map(ProcessNode *node);
+ProcessNode* find_node(int pid);
+void delete_node(int pid);
 
 int main() {
     DIR *dir = opendir("/proc");
@@ -60,6 +56,22 @@ int main() {
     }
     printf("\n");
     closedir(dir);
+
+    // 创建一个节点
+    ProcessNode *p1 = (ProcessNode*)malloc(sizeof(ProcessNode));
+    p1->pid = 100;
+    p1->ppid = 1;
+    
+    // 添加到哈希表
+    add_node_map(p1);
+    
+    // 查找
+    ProcessNode *found = find_node(100);
+    if (found) {
+        printf("Found PID: %d\n", found->pid);
+    } else {
+        printf("Not Found\n");
+    }
 }
 
 bool isAllDigits(const char *str) {
@@ -129,4 +141,39 @@ void free_tree(ProcessNode* node) {
     
     // 最后释放自己
     free(node);
+}
+
+// 3. 查找节点
+ProcessNode* find_node(int pid) {
+    ProcessNode* node = NULL;
+    
+    // 注意这里是 &pid (取地址)
+    HASH_FIND_INT(map, &pid, node); 
+    
+    return node;
+}
+
+// 4. 添加节点
+void add_node_map(ProcessNode *insert) {
+    ProcessNode* node = NULL;
+
+    // 先检查是否已经存在
+    HASH_FIND_INT(map, &insert->pid, node);
+
+    if (node == NULL) {
+        // pid 是结构体内的字段名
+        HASH_ADD_INT(map, pid, insert); 
+    }
+}
+
+// 5. 删除节点
+void delete_node(int pid) {
+    ProcessNode* node = find_node(pid);
+
+    if (node != NULL) {
+        HASH_DEL(map, node); // 从哈希表中移除
+        // 注意：这里是否 free(node) 取决于你的内存管理策略
+        // 如果你希望彻底删除，这里应该调用 free_tree(node) 或 free(node)
+        free(node);
+    }
 }
