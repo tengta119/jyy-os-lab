@@ -17,7 +17,8 @@ int main() {
 
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL) {
-        printf("\n %s", entry->d_name);
+        char *fileName = entry->d_name;
+        printf("\n %s", fileName);
     }
     
     closedir(dir);
