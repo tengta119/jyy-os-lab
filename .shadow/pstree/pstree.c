@@ -54,7 +54,7 @@ int main() {
             char path[256];
             snprintf(path, sizeof(path), "/proc/%s/status", entry->d_name);
             ProcessNode *node = create_node(path);
-            printf("|-- %s (PID: %d)\n", node->name, node->pid);
+            printf("|-- %s (PID: %d, PPID: %d)\n", node->name, node->pid, node->ppid);
         }
     }
     printf("\n");
