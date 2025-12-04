@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     char *exec_envp[] = { "PATH=/bin", NULL, };
 
     //execve("/bin/strace", exec_argv, exec_envp);
-    pid_t pid = fork();
+    //pid_t pid = fork();
 
     // if (pid == -1) {
     //     perror("fork failed"); // 打印错误原因
