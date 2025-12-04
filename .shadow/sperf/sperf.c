@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
 
     if (pid == -1) {
         perror("fork failed"); // 打印错误原因
-        exit(EXIT_FAILURE);
     } else if (pid == 0) {
         printf("子进程 | PID：%d | 父进程PID：%d\n", getpid(), getppid());
     } else {
