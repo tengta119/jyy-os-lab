@@ -28,5 +28,5 @@ void print_top_syscalls(syscall_stats *stats, int n) {
 }
 
 int main(int argc, char *argv[]) {
-    printf("Hello world M3");
+    printf("Hello world M3 \n");
 }
