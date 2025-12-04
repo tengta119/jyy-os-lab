@@ -28,11 +28,10 @@ void print_top_syscalls(syscall_stats *stats, int n) {
 }
 
 int main(int argc, char *argv[]) {
-    char *exec_argv[] = { "strace", "top", NULL, };
+    char *exec_argv[] = { "strace", "ls -l", NULL, };
     char *exec_envp[] = { "PATH=/bin", NULL, };
-    //execve("strace",          exec_argv, exec_envp);
-    execve("/bin/strace",     exec_argv, exec_envp);
-    //execve("/usr/bin/strace", exec_argv, exec_envp);
+
+    execve("/bin/strace", exec_argv, exec_envp);
 
     return 0;
 }
