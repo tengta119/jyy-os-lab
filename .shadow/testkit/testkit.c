@@ -235,11 +235,11 @@ static void notify_worker() {
     // Signal the worker process--we must send tests array because
     // tests in the worker process may not be correctly initialized.
 
-    write(pipe_write, tests, sizeof(tests));
-    close(pipe_write);
+    //write(pipe_write, tests, sizeof(tests));
+    //close(pipe_write);
 
     // Wait for the worker to complete
-    waitpid(worker_pid, NULL, 0);
+    //waitpid(worker_pid, NULL, 0);
 }
 
 static void worker_process() {
