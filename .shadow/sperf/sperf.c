@@ -30,14 +30,15 @@ void print_top_syscalls(syscall_stats *stats, int n) {
 
 int main(int argc, char *argv[]) {
 
-    char *exec_argv[argc + 1];
+    char *exec_argv[argc + 2];
     exec_argv[0] = "strace";
-    for (size_t i = 1; i <= argc; i++) {
-        if (i == argc) {
+    exec_argv[1] = "-T";
+    for (size_t i = 2; i <= argc + 1; i++) {
+        if (i == argc + 1) {
             exec_argv[i] = NULL;
             break;
         }
-        exec_argv[i] = argv[i];
+        exec_argv[i] = argv[i - 1];
     }
     char *exec_envp[] = { "PATH=/bin", NULL, };
 
