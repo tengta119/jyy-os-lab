@@ -41,13 +41,14 @@ int main(int argc, char *argv[]) {
     }
     char *exec_envp[] = { "PATH=/bin", NULL, };
 
-    //execve("/bin/strace", exec_argv, exec_envp);
+    
     pid_t pid = fork();
 
     if (pid == -1) {
         perror("fork failed"); // 打印错误原因
     } else if (pid == 0) {
         printf("子进程 | PID：%d | 父进程PID：%d\n", getpid(), getppid());
+        execve("/bin/strace", exec_argv, exec_envp);
     } else {
         printf("父进程 | PID：%d | 子进程PID：%d\n", getpid(), pid);
     }
